@@ -1,5 +1,9 @@
 ## Welcome to GitHub Pages
 
+### About me
+
+I am a fourth-year student at The George Washington University graduating in December 2020 with a BA in Communication and minors in Sustainability and Journalism. I am looking to pair my academic interests in media relations with advocacy for global sustainability.
+
 You can use the [editor on GitHub](https://github.com/Epalmer20/Epalmer20.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
 Hi, putting in new web content
