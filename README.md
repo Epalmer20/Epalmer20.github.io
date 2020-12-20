@@ -6,6 +6,10 @@ I am a fourth-year student at The George Washington University graduating in Dec
 
 ### Impeachment analysis
 
+In October 2020, we used raw data of House Democrats’ positions regarding President Trump’s impeachment to find potential stories. 
+
+Results can be found [here](https://Epalmer20.github.io/impeachmentanalysis/Impeachmentanalysis.html)
+
 ### Biden transition analysis 
 
 After Joe Biden's 2020 election, there were new appointments to the White House and agencies. For this class we scraped data from [website](https://buildbackbetter.gov/nominees-and-appointees/) using R to analyze the new appointees under Biden. 
