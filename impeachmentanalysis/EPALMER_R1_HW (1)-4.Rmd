@@ -1,9 +1,21 @@
-#Impeachment Analysis
-##October 30, 2020
+#first we'll load our libraries
+library(tidyverse)
+library(lubridate)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(scales)
+library(gt)
+library(kableExtra)
+library(magrittr)
+options(dplyr.summarise.inform = FALSE)
 
 
-## run this to load the data for this assignment
-## it will create a dataframe called "impeach," with all House Democrats
+# run this to load the data for this assignment
+# it will create a dataframe called "impeach," with all House Democrats
 impeach <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRh8d5JaDqBtByzNw2JZF3idaACobDhhk-p7chJoktA0HawELHFOvjQOqCpzGA4MGONvPlR7GASqW-K/pub?gid=1765341510&single=true&output=csv")
 
 
@@ -21,6 +33,28 @@ impeach <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRh8d5JaDqB
 impeach %>% 
   filter(for_impeachment == "NO")
 
+```{r, echo=FALSE}
+
+impeach %>%
+  filter(for_impeachment == "NO")%>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    p16winningparty = " District Trump won in 2016",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty))
+
+```
 
 
 # 2) Filter to return only results where a member is both against impeachment, and comes from a 
