@@ -1,7 +1,15 @@
-#first we'll load our libraries
+---
+title: "GW Assignment - Impeachment Analysis"
+author: "Eleanor Palmer"
+date: "October 30, 2020"
+output: html_document
+---
+
+
+```{r, include=FALSE}
+
 library(tidyverse)
 library(lubridate)
-
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -12,23 +20,19 @@ library(gt)
 library(kableExtra)
 library(magrittr)
 options(dplyr.summarise.inform = FALSE)
+```
+```{r, include=FALSE}
+impeach <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRh8d5JaDqBtByzNw2JZF3idaACobDhhk-p7chJoktA0HawELHFOvjQOqCpzGA4MGONvPlR7GASqW-K/pub?gid=1765341510&single=true&output=csv")
+```
 
 
-# run this to load the data for this assignment
-# it will create a dataframe called "impeach," with all House Democrats
+## INSTRUCTIONS: run this to load the data for this assignment, it will create a dataframe called "impeach," with all House Democrats. WRITE YOUR WORKING R CODE TO RETURN THE REQUESTED RESULTS. Explain what you're doing for each step. 
+
 impeach <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRh8d5JaDqBtByzNw2JZF3idaACobDhhk-p7chJoktA0HawELHFOvjQOqCpzGA4MGONvPlR7GASqW-K/pub?gid=1765341510&single=true&output=csv")
 
+## 1) The column "for_impeachment" indicates whether the member has publicly called for an impeachment inquiry. Filter to return only the ones where the answer is NO.    
 
-# FOR EACH OF THE QUESTIONS BELOW, WRITE YOUR WORKING R CODE TO RETURN THE REQUESTED RESULTS
-# USE COMMENTS (PREFACED BY THE #) BEFORE THE WORKING CODE TO EXPLAIN WHAT YOU'RE DOING FOR EACH STEP
-
-
-
-# 1) The column "for_impeachment" indicates whether the member has publicly called for
-# an impeachment inquiry. Filter to return only the ones where the answer is NO.    
-
-# Used Impeach dataframe name with the pipe to bring up the data set.
-# Then I used filter function to locate the column name for impeachment and put the == "NO" response in quotes. 
+### Used Impeach dataframe name with the pipe to bring up the data set.Then I used filter function to locate the column name for impeachment and put the == "NO" response in quotes. 
 
 impeach %>% 
   filter(for_impeachment == "NO")
@@ -43,6 +47,36 @@ impeach %>%
     )%>%
   cols_label(
     for_impeachment = "For Impeachment",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+```
+
+
+## 2) Filter to return only results where a member is both against impeachment, and comes from a district that President Trump won in 2016 (which is noted in the "p16winningparty" column)
+
+### Used Impeach dataframe with the pipe bring up the data set,  And then I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added another pipe. Then I used the filter function again for p16winningparty to sort for == "R" response in quotes. R would correlate to a district that Trump won. 
+
+impeach %>% 
+  filter(for_impeachment == "NO") %>%
+  filter (p16winningparty == "R")
+
+```{r, echo=FALSE}
+impeach %>%
+  filter(for_impeachment == "NO")%>%
+  filter(p16winningparty == "R")%>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment in Districts that Trump Won"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
     p16winningparty = " District Trump won in 2016",
     first_name = "First Name",
     last_name = "Last Name",
@@ -53,33 +87,11 @@ impeach %>%
   cols_hide(
     columns = vars(
       middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty))
-
 ```
 
+## 3) Filter for only results where a member is against impeachment, comes from a district that President Trump won in 2016 (which is noted in the "p16winningparty" column),and also comes from a district that Mitt Romney won in 2012 ("p12winningparty").
 
-# 2) Filter to return only results where a member is both against impeachment, and comes from a 
-# district that President Trump won in 2016 (which is noted in the "p16winningparty" column)
-
-# Used Impeach dataframe with the pipe bring up the data set, 
-# And then I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added another pipe. 
-# Then I used the filter function again for p16winningparty to sort for == "R" response in quotes. R would correlate to a district that Trump won. 
-
-
-impeach %>% 
-  filter(for_impeachment == "NO") %>%
-  filter (p16winningparty == "R")
-
-
-# 3) Filter for only results where a member is against impeachment, comes from a 
-# district that President Trump won in 2016 (which is noted in the "p16winningparty" column),
-# and also comes from a district that Mitt Romney won in 2012 ("p12winningparty").
-
-# Use Impeach dataframe with the pipe bring up the data set, 
-# I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added another pipe. 
-# Then I used the filter function again for p16winningparty to sort for == "R" response in quotes. R would correlate to a district that Trump won, and added another pipe.  
-# Then I used the filter function again for p12winningparty  to sort for == "R" response in quotes. R would correlate to a district that Romney won (added another pipe.)
-# Then I used select to view the columns that were being filtered, and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+### Use Impeach dataframe with the pipe bring up the data set,  I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added another pipe.  Then I used the filter function again for p16winningparty to sort for == "R" response in quotes. R would correlate to a district that Trump won, and added another pipe.   Then I used the filter function again for p12winningparty  to sort for == "R" response in quotes. R would correlate to a district that Romney won (added another pipe.) Then I used select to view the columns that were being filtered, and separated column names by commas.I also added the column last_name to view members associated with the data. 
 
 impeach %>% 
   filter(for_impeachment == "NO") %>%
@@ -87,16 +99,35 @@ impeach %>%
   filter (p12winningparty == "R") %>%
   select(for_impeachment,last_name,p16winningparty,p12winningparty)
 
+```{r, echo=FALSE}
+impeach %>%
+  filter(for_impeachment == "NO")%>%
+  filter(p16winningparty == "R")%>%
+  filter (p12winningparty == "R") %>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment in Districts Trump & Romney Won"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    p16winningparty = " District Trump won in 2016",
+    p12winningparty = "Districts Romney won in 2012",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent))
+```
 
 
-# 4) Filter for only results from September 2019 where a member is a YES for impeachment. 
 
-# Use Impeach dataframe with the pipe bring up the data set, 
-# I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added another pipe. 
-# Then I used the filter function again for date_month to sort for == "9" response in quotes for September (added another pipe).
-# Then I used the filter function again for date_year to sort for == "2019" response in quotes. (added another pipe.)
-# Then I used select to view the columns that were being filtered, and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+## 4) Filter for only results from September 2019 where a member is a YES for impeachment.  
+
+### Used Impeach dataframe with the pipe bring up the data set,I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added another pipe. Then I used the filter function again for date_month to sort for == "9" response in quotes for September (added another pipe). Then I used the filter function again for date_year to sort for == "2019" response in quotes. (added another pipe.) Then I used select to view the columns that were being filtered, and separated column names by commas. I also added the column last_name to view members associated with the data. 
 
 impeach %>% 
   filter(for_impeachment == "YES") %>%
@@ -104,122 +135,270 @@ impeach %>%
   filter (date_year == "2019") %>%
   select(for_impeachment,last_name,date_month,date_year)
 
+```{r, echo=FALSE}
+impeach %>% 
+  filter(for_impeachment == "YES") %>%
+  filter(date_month == "9") %>%
+  filter (date_year == "2019") %>%
+  gt() %>%
+  tab_header(
+    title = "September 2019 For Impeachment"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+```
 
 
-# 4) Filter for only results where a member is a YES for impeachment and is from a district
-# where Clinton won more than 70 percent of the vote in 2016 (found in column "clinton_percent")
+## 4) Filter for only results where a member is a YES for impeachment and is from a district where Clinton won more than 70 percent of the vote in 2016 (found in column "clinton_percent")
 
-# Used Impeach dataframe with the pipe bring up the data set, 
-# I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added a pipe. 
-# Then I used the filter function for clinton_percent with the greater than or equal to sign >== of 70 (no need for quotes since its a number)(added another pipe).
-# Then I used select to view the columns that were being filtered, and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+### Used Impeach dataframe with the pipe bring up the data set,  I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added a pipe.  Then I used the filter function for clinton_percent with the greater than or equal to sign >== of 70 (no need for quotes since its a number)(added another pipe). Then I used select to view the columns that were being filtered, and separated column names by commas. I also added the column last_name to view members associated with the data. 
 
 impeach %>% 
   filter(for_impeachment == "YES") %>%
   filter(clinton_percent >= 70)%>%
   select(for_impeachment,last_name,clinton_percent)
   
+```{r, echo=FALSE}
+impeach %>% 
+  filter(for_impeachment == "YES") %>%
+  filter(clinton_percent >= 70)%>%
+ gt() %>%
+  tab_header(
+    title = "For Impeachment where Clinton won > 70 Percent"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    clinton_percent = "Pct Clinton Won",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+```
 
-# 5) Sort the entire dataframe based on the percentage of a district that has a 
-# bachelor's degree or higher ("pct_bachelors"), from lowest to highest
+  
 
-# Used Impeach dataframe with the pipe bring up the data set, 
-# Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). 
-# Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.
-# I also added the column district. 
+## 5) Sort the entire dataframe based on the percentage of a district that has a bachelor's degree or higher ("pct_bachelors"), from lowest to highest
+
+### Used Impeach dataframe with the pipe bring up the data set, Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.I also added the column district. 
 
 impeach %>% 
   arrange(pct_bachelors)%>%
   select(pct_bachelors,state,district)
   
+```{r, echo=FALSE}
 
-# 6) Sort the just those who are NO on impeachment based on the percentage of a district that has a 
-# bachelor's degree or higher ("pct_bachelors"), from lowest to highest
+impeach %>% 
+  arrange(pct_bachelors)%>%
+  gt() %>%
+  tab_header(
+    title = "Percentage of a district that has a Bachelor's Degree or Higher"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    pct_bachelors = "Percent with Bachelor's Degree",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
 
-# Used Impeach dataframe with the pipe bring up the data set. 
-# I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe. 
-# Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). 
-# Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+
+```
+  
+
+## 6) Sort the just those who are NO on impeachment based on the percentage of a district that has a bachelor's degree or higher ("pct_bachelors"), from lowest to highest
+
+### Used Impeach dataframe with the pipe bring up the data set.  I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe. Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.I also added the column last_name to view members associated with the data. 
 
 impeach %>% 
   filter(for_impeachment == "NO")%>%
   arrange(pct_bachelors) %>%
   select(for_impeachment,last_name,pct_bachelors)
 
+```{r, echo=FALSE}
+impeach %>% 
+  filter(for_impeachment == "NO")%>%
+  arrange(pct_bachelors) %>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment from Districts with the Lowest percentage of Bachelor's Degrees"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    pct_bachelors = "Percent with Bachelor's Degree",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+```
 
 
-# 7) Sort the just those who are NO on impeachment based on the percentage of a district that has a 
-# bachelor's degree or higher ("pct_bachelors"), from lowest to highest.
-# Then filter those records by only those whose bachelor's percentage is below the national average (found
-# in the "pct_bachelors_compared_to_national" column).
+## 7) Sort the just those who are NO on impeachment based on the percentage of a district that has a bachelor's degree or higher ("pct_bachelors"), from lowest to highest.Then filter those records by only those whose bachelor's percentage is below the national average (found in the "pct_bachelors_compared_to_national" column).
 
-# Used Impeach dataframe with the pipe bring up the data set. 
-# I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe.
-# Then I used filter function to locate the column name pct_bachelors_compared_to_national and put the == "BELOW" response in quotes and added a pipe. 
-# Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). 
-# Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+### Used Impeach dataframe with the pipe bring up the data set. I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe. Then I used filter function to locate the column name pct_bachelors_compared_to_national and put the == "BELOW" response in quotes and added a pipe.  Then I used the arrange function for pct_bachelors which automatically sorts the pct from lowest to highest. (added pipe). Then I used select to view the columns that were being filtered/arranged, and separated column names by commas.I also added the column last_name to view members associated with the data. 
 
 impeach %>% 
   filter(for_impeachment == "NO")%>%
   filter(pct_bachelors_compared_to_national =="BELOW")%>%
   arrange(pct_bachelors) %>%
   select(for_impeachment,last_name,pct_bachelors,pct_bachelors_compared_to_national)
+  
+```{r, echo=FALSE}
+
+impeach %>% 
+  filter(for_impeachment == "NO")%>%
+  filter(pct_bachelors_compared_to_national =="BELOW")%>%
+  arrange(pct_bachelors) %>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment from Disctricts with percentage of Bachelor's Degrees Below the National Average"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    pct_bachelors = "Percent with Bachelor's Degree",
+    pct_bachelors_compared_to_national = "Pct Bachelor's compared to National Pct",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+  
+```
 
 
-# 8) Filter for only members from New Jersey who are NO on impeachment
+## 8) Filter for only members from New Jersey who are NO on impeachment
 
-# Used Impeach dataframe with the pipe bring up the data set. 
-# I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe.
-# Then I used filter function to locate the column name state and put the == "NJ" response in quotes and added a pipe. 
-# Then I used select to view the columns that were being filtered and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+### Used Impeach dataframe with the pipe bring up the data set. I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe. Then I used filter function to locate the column name state and put the == "NJ" response in quotes and added a pipe.  Then I used select to view the columns that were being filtered and separated column names by commas. I also added the column last_name to view members associated with the data. 
 
 impeach %>%
   filter(for_impeachment == "NO")%>%
   filter(state == "NJ") %>%
   select(for_impeachment,last_name,state) 
 
+```{r, echo=FALSE}
 
-# 9) Filter for those who were YES on impeachment, with a declared date prior to 2019. So only
-# those with dates before 2019.  Then sort those so that the highest Clinton vote percentages are 
-# at the top. 
+impeach %>%
+  filter(for_impeachment == "NO")%>%
+  filter(state == "NJ") %>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment Members from New Jersey"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, date_year, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+  
 
-# Used Impeach dataframe with the pipe bring up the data set. 
-# I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added a pipe.
-# Then I used filter function to locate the column name date_year and put the less than sign (<) 2019 (no quotes) and added a pipe. 
-# Then I used arrange(desc) to view clinton_percent from highest to lowest. (added pipe)
-# Then I used select to view the columns that were being filtered and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
+```
+
+
+## 9) Filter for those who were YES on impeachment, with a declared date prior to 2019. So only those with dates before 2019.  Then sort those so that the highest Clinton vote percentages are at the top. 
+
+### Used Impeach dataframe with the pipe bring up the data set. I used filter function to locate the column name for_impeachment and put the == "YES" response in quotes and added a pipe. Then I used filter function to locate the column name date_year and put the less than sign (<) 2019 (no quotes) and added a pipe.  Then I used arrange(desc) to view clinton_percent from highest to lowest. (added pipe) Then I used select to view the columns that were being filtered and separated column names by commas. I also added the column last_name to view members associated with the data. 
  
-
-
 impeach %>%
   filter(for_impeachment == "YES")%>%
   filter(date_year < 2019)%>%
   arrange(desc(clinton_percent))%>%
   select(for_impeachment,last_name,clinton_percent,date_year)
   
+```{r, echo=FALSE}
+
+impeach %>%
+  filter(for_impeachment == "YES")%>%
+  filter(date_year < 2019)%>%
+  arrange(desc(clinton_percent))%>%
+  gt() %>%
+  tab_header(
+    title = "Members For Impeachment before 2019 in Districts with Highest Clinton Vote"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    clinton_percent = "Clinton Vote Percent",
+    date_year = "Year",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, gdp_above_national, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+
+```
+  
 
 
-# 10) Answer this question with a single numeric answer, and show the R code you
-# used to reach that answer: How many members in the dataset who are holdouts on impeachment
-# comes from districts with a GDP below the national figure?
+## 10) Answer this question with a single numeric answer, and show the R code you used to reach that answer: How many members in the dataset who are holdouts on impeachment comes from districts with a GDP below the national figure?
 
-# Used Impeach dataframe with the pipe bring up the data set. 
-# I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe.
-# Then I used filter function to locate the column name gdo_above_national and put == "BELOW" response in quotes and added a pipe. 
-# Then I used select to view the columns that were being filtered and separated column names by commas.
-# I also added the column last_name to view members associated with the data. 
-#There were 19 returns so the answer is 19 members. 
-
+### Used Impeach dataframe with the pipe bring up the data set.  I used filter function to locate the column name for_impeachment and put the == "NO" response in quotes and added a pipe. Then I used filter function to locate the column name gdo_above_national and put == "BELOW" response in quotes and added a pipe. Then I used select to view the columns that were being filtered and separated column names by commas. I also added the column last_name to view members associated with the data. There were 19 returns so the answer is 19 members. 
 
 impeach %>%
   filter(for_impeachment == "NO")%>%
   filter(gdp_above_national == "BELOW")%>%
   select(for_impeachment,last_name, gdp_above_national)
+  
+```{r, echo=FALSE}
+
+impeach %>%
+  filter(for_impeachment == "NO")%>%
+  filter(gdp_above_national == "BELOW")%>%
+  gt() %>%
+  tab_header(
+    title = "Against Impeachment from Districts with GDP below National Figure"
+    )%>%
+  cols_label(
+    for_impeachment = "For Impeachment",
+    gdp_above_national= "Districts GDP compared to National",
+    date_year = "Year",
+    first_name = "First Name",
+    last_name = "Last Name",
+    party = "Party",
+    state = "State",
+    district = "District"
+      )%>%
+  cols_hide(
+    columns = vars(
+      middle_name, date_exact, date_approx_month, date_comb, date_month, margin_flag_2018, flip_2018, house_dist, keyrace_rating, median_income, median_income_compared_to_national, median_age, median_age_compared_to_national, pct_nonwhite, pct_nonwhite_compared_to_national, pct_bachelors, pct_bachelors_compared_to_national, rural_pop_above20pct, clinton_percent, trump_percent, obama_percent, romney_percent, p12winningparty, p16winningparty))
+
+```
+  
 
 #Answer: 19
 
