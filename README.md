@@ -10,7 +10,7 @@ I am a fourth-year student at The George Washington University graduating in Dec
 
 After Joe Biden's 2020 election, there were new appointments to the White House and agencies. For this class we scraped data from [website](https://buildbackbetter.gov/nominees-and-appointees/) using R to analyze the new appointees under Biden. 
 
-Results can be found [here](file:///Users/elliepalmer/GITREPSITORY/Epalmer20.github.io/Biden%20Transition/Index.html).
+Results can be found [here](https://Epalmer20.github.io/Biden%20Transition/Index.html).
 
 ### Biden transition tracker
 
