@@ -3,8 +3,7 @@ title: "Biden Transition Tracker"
 date: December 20, 2020
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
-    vertical_layout: fill
+    vertical_layout: scroll
     theme: cerulean
 ---
 
@@ -15,9 +14,12 @@ library(DT)
 library(wrangle)
 library(tidyverse)
 
+newnames <- readRDS("~/GITREPSITORY/gw_r_assignment_transition/processed_data/newnames.rds")
+staff_data_scraped <- readRDS("~/GITREPSITORY/gw_r_assignment_transition/processed_data/staff_data_scraped.rds")
+
 ```
 
-Agency Review Teams
+Agency Review Teams  {.tabset}
 ===============================================================================================================
 To filter, click on the boxes at the top of the columns. To sort, use the use/down arrows by the column name.
 
@@ -46,8 +48,8 @@ newnames_table1 <-newnames %>%
                          buttons = c('copy', 'csv', 'excel', 'print')))
  
 ```
-White House Senior Staff
 
+White House Senior Staff {.tabset}
 ===============================================================================================================
 To filter, click on the boxes at the top of the columns. To sort, use the use/down arrows by the column name.
 
