@@ -1,9 +1,11 @@
 ---
-title: "Biden Transition Track"
+title: "Biden Transition Tracker"
+date: December 20, 2020
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
+    theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
@@ -11,35 +13,63 @@ library(flexdashboard)
 library(plotly)
 library(DT)
 library(wrangle)
-library(gt)
+library(tidyverse)
+
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
+Agency Review Teams
+===============================================================================================================
+To filter, click on the boxes at the top of the columns. To sort, use the use/down arrows by the column name.
 
-### Chart A
+Row {data-height=1000}
+---------------------------------------------------------------------------------------------------------------
 
-```{r}
+### Agency Review Teams
 
+```{r, Include = FALSE}
 
+newnames_table1 <-newnames %>%
+  select(name, agency, team_lead, on_multiple_teams, most_recent_employment, source_of_funding, -idstring, -namestring)%>%
+  rename(
+    'Name' = name,
+    'Agency' = agency,
+    'Team Lead' = team_lead,
+    'On Multiple Teams' = on_multiple_teams,
+    'Most Recent Employment' = most_recent_employment, 
+    'Source of Funding' = source_of_funding)
+
+  datatable(newnames_table1,
+          rownames = FALSE, 
+          filter = "top", 
+          extensions = 'Buttons',
+          options = list(searchHighlight = TRUE, bpaginate = FALSE, dom = 'Bfrtip',
+                         buttons = c('copy', 'csv', 'excel', 'print')))
+ 
+```
+White House Senior Staff
+
+===============================================================================================================
+To filter, click on the boxes at the top of the columns. To sort, use the use/down arrows by the column name.
+
+Row {data-height=1000}
+---------------------------------------------------------------------------------------------------------------
+
+### White House Senior Staff
+
+```{r, Include = FALSE}
+ Newstaff_table1 <-staff_data_scraped %>%
+  select(name, title, -link, -idstring)%>%
+  rename(
+    'Name' = name,
+    'Title' = title, 
+    )
   
+  datatable(Newstaff_table1,
+          rownames = FALSE, 
+          filter = "top", 
+          extensions = 'Buttons',
+          options = list(searchHighlight = TRUE, bpaginate = FALSE, dom = 'Bfrtip',
+                         buttons = c('copy', 'csv', 'excel', 'print')))
 
-  
-
-```
-
-Column {data-width=350}
------------------------------------------------------------------------
-
-### Chart B
-
-```{r}
 
 ```
-
-### Chart C
-
-```{r}
-
-```
-
